@@ -1,0 +1,37 @@
+<!-- Testimonials Slider -->
+<section class="py-24 bg-white relative overflow-hidden">
+    <div class="max-w-5xl mx-auto px-4 text-center">
+        
+        <!-- Circular Overlay Background -->
+        <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-zuva-peach/5 rounded-full blur-3xl z-0"></div>
+
+        <div class="relative z-10 scroll-hidden">
+            <i data-lucide="quote" class="w-12 h-12 text-zuva-peach mx-auto mb-8 opacity-50"></i>
+            
+            <div id="testimonial-container" class="min-h-[250px] flex items-center justify-center">
+                <!-- Javascript will inject content here -->
+                <div class="testimonial-slide opacity-0 transition-opacity duration-500 absolute inset-0 flex flex-col items-center justify-center">
+                     <h3 class="font-serif text-2xl md:text-4xl text-zuva-taupe italic mb-8 leading-normal">
+                        "Zuva didn't just help me cope; it taught me how to bloom. I finally feel at home in my own life."
+                    </h3>
+                    <div class="flex items-center gap-4">
+                        <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop" alt="Sarah" class="w-12 h-12 rounded-full object-cover">
+                        <div class="text-left">
+                            <p class="font-sans font-semibold text-zuva-taupe text-sm">Sarah M.</p>
+                            <p class="font-sans text-xs text-zuva-taupe/60">Creative Director, 29</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="flex justify-center gap-4 mt-8">
+                <button onclick="prevSlide()" class="p-2 rounded-full border border-zuva-taupe/20 hover:bg-zuva-peach hover:text-white hover:border-transparent transition-all">
+                    <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                </button>
+                <button onclick="nextSlide()" class="p-2 rounded-full border border-zuva-taupe/20 hover:bg-zuva-peach hover:text-white hover:border-transparent transition-all">
+                    <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                </button>
+            </div>
+        </div>
+    </div>
+</section>
