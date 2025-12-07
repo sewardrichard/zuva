@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" class="overflow-x-hidden">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -216,6 +216,7 @@
             height: 25vh; 
             z-index: 2;
             pointer-events: none;
+            overflow: hidden;
         }
 
         .hill {
@@ -304,7 +305,7 @@
         }
     </style>
 </head>
-<body class="font-sans antialiased selection:bg-zuva-peach selection:text-white">
+<body class="font-sans antialiased selection:bg-zuva-peach selection:text-white overflow-x-hidden">
 
     <!-- Navigation -->
     <nav class="fixed w-full z-50 transition-all duration-300 glass-panel" id="navbar">
@@ -409,11 +410,13 @@
     </section>
 
     <!-- Services Overview -->
-    <section id="services" class="py-24 px-4 bg-white relative z-20 shadow-[0_-50px_100px_rgba(0,0,0,0.1)]">
+    <section id="services" class="py-24 px-4 bg-white relative z-20 shadow-[0_-50px_100px_rgba(0,0,0,0.1)] overflow-hidden">
         <div class="max-w-7xl mx-auto">
             <div class="text-center mb-16 scroll-hidden">
-                <h2 class="font-serif text-4xl text-zuva-taupe mb-4">Holistic Care for Every Season</h2>
-                <div class="h-0.5 w-16 bg-zuva-peach mx-auto"></div>
+                <span class="text-zuva-peach text-sm uppercase tracking-widest font-semibold block mb-2">Our Guiding Paths</span>
+                <h2 class="font-serif text-4xl text-zuva-taupe mb-4">Holistic Care That Honors Your Entire Self</h2>
+                <p class="font-sans text-zuva-taupe/70 max-w-2xl mx-auto mt-4">We embrace holistic care that honors your entire self. Select the path that aligns with your current needs.</p>
+                <div class="h-0.5 w-16 bg-zuva-peach mx-auto mt-6"></div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
@@ -427,9 +430,9 @@
                         <div class="flex justify-center mb-4">
                             <i data-lucide="heart-handshake" class="w-8 h-8 text-zuva-peach"></i>
                         </div>
-                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Therapy & Counseling</h3>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Personal Therapy</h3>
                         <p class="font-sans text-zuva-taupe/70 leading-relaxed mb-4">
-                            One-on-one sessions tailored to your unique story. A safe space to unpack, heal, and grow.
+                            Deep, confidential support for emotional healing and self-discovery. Sessions tailored to your unique story and goals.
                         </p>
                         <a href="#" class="text-zuva-peach text-sm uppercase tracking-widest border-b border-zuva-peach/50 pb-1 hover:text-zuva-taupe transition-colors">Learn More</a>
                     </div>
@@ -445,9 +448,9 @@
                         <div class="flex justify-center mb-4">
                             <i data-lucide="compass" class="w-8 h-8 text-zuva-peach"></i>
                         </div>
-                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Life Coaching</h3>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Wellness Coaching</h3>
                         <p class="font-sans text-zuva-taupe/70 leading-relaxed mb-4">
-                            Forward-focused guidance to help you navigate transitions, career shifts, and personal goals.
+                            Practical tools and accountability to build sustainable habits in stress management, mindset, and holistic well-being.
                         </p>
                         <a href="#" class="text-zuva-peach text-sm uppercase tracking-widest border-b border-zuva-peach/50 pb-1 hover:text-zuva-taupe transition-colors">Learn More</a>
                     </div>
@@ -463,9 +466,9 @@
                         <div class="flex justify-center mb-4">
                             <i data-lucide="sun-medium" class="w-8 h-8 text-zuva-peach"></i>
                         </div>
-                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Holistic Wellbeing</h3>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Holistic Wellbeing Support</h3>
                         <p class="font-sans text-zuva-taupe/70 leading-relaxed mb-4">
-                            Integrating mind and body through meditation, mindfulness workshops, and cycle-syncing resources.
+                            Focused programs on mindfulness, emotional regulation, and intentional living to restore clarity and balance in your daily routine.
                         </p>
                         <a href="#" class="text-zuva-peach text-sm uppercase tracking-widest border-b border-zuva-peach/50 pb-1 hover:text-zuva-taupe transition-colors">Learn More</a>
                     </div>
@@ -485,8 +488,9 @@
 
         <div class="max-w-7xl mx-auto px-4 relative z-10">
             <div class="text-center mb-20 scroll-hidden">
-                <span class="text-zuva-peach text-sm uppercase tracking-widest font-semibold block mb-2">The Zuva Method</span>
-                <h2 class="font-serif text-4xl md:text-5xl text-zuva-taupe">Navigating Transitions</h2>
+                <span class="text-zuva-peach text-sm uppercase tracking-widest font-semibold block mb-2">Every Sunset Promises a Sunrise</span>
+                <h2 class="font-serif text-4xl md:text-5xl text-zuva-taupe">New Beginnings & Transitions</h2>
+                <p class="font-sans text-zuva-taupe/70 max-w-2xl mx-auto mt-4">This space celebrates life's natural rhythms. We provide guidance to flow through emotional cycles, close old chapters intentionally, and embrace new ones with clarity.</p>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
@@ -497,9 +501,10 @@
                         <div class="w-16 h-16 rounded-full bg-zuva-ivory flex items-center justify-center mb-6 mx-auto md:mx-0">
                             <span class="font-serif text-2xl text-zuva-peach italic">01</span>
                         </div>
+                        <h4 class="text-zuva-peach text-xs uppercase tracking-widest mb-2 text-center md:text-left">Understanding Your Emotional Seasons</h4>
                         <h3 class="font-serif text-2xl text-zuva-taupe mb-4 text-center md:text-left">Discover Your Cycle</h3>
                         <p class="text-zuva-taupe/70 text-center md:text-left leading-relaxed">
-                            Understanding where you are. We help you map your emotional and life phases, recognizing patterns without judgment.
+                            Identify your emotional patterns and phases. Our tools empower you to honor the natural cycles of rest and growth, rather than resisting them.
                         </p>
                     </div>
                 </div>
@@ -510,9 +515,10 @@
                         <div class="w-16 h-16 rounded-full bg-zuva-ivory flex items-center justify-center mb-6 mx-auto md:mx-0">
                             <span class="font-serif text-2xl text-zuva-peach italic">02</span>
                         </div>
+                        <h4 class="text-zuva-peach text-xs uppercase tracking-widest mb-2 text-center md:text-left">Letting Go to Receive</h4>
                         <h3 class="font-serif text-2xl text-zuva-taupe mb-4 text-center md:text-left">Ending with Intention</h3>
                         <p class="text-zuva-taupe/70 text-center md:text-left leading-relaxed">
-                            Before the new begins, the old must close. We provide tools for intentional closure, grief processing, and letting go.
+                            Engage in practices for purposeful closure—whether ending a relationship, job, or habit. We help you release what dims your light, creating space for what's next.
                         </p>
                     </div>
                 </div>
@@ -523,9 +529,10 @@
                         <div class="w-16 h-16 rounded-full bg-zuva-ivory flex items-center justify-center mb-6 mx-auto md:mx-0">
                             <span class="font-serif text-2xl text-zuva-peach italic">03</span>
                         </div>
+                        <h4 class="text-zuva-peach text-xs uppercase tracking-widest mb-2 text-center md:text-left">Clarity, Warmth, and Direction</h4>
                         <h3 class="font-serif text-2xl text-zuva-taupe mb-4 text-center md:text-left">Creating Fresh Starts</h3>
                         <p class="text-zuva-taupe/70 text-center md:text-left leading-relaxed">
-                            Building the new you. Actionable strategies, goal setting, and sustainable habits for your next chapter.
+                            Access tools, guided meditations, and resources to clarify your path forward. Gather the energy to step boldly into your new beginning.
                         </p>
                     </div>
                 </div>
@@ -535,7 +542,7 @@
     </section>
 
     <!-- Testimonials Slider -->
-    <section class="py-24 bg-white relative">
+    <section class="py-24 bg-white relative overflow-hidden">
         <div class="max-w-5xl mx-auto px-4 text-center">
             
             <!-- Circular Overlay Background -->
@@ -573,22 +580,22 @@
     </section>
 
     <!-- Final CTA -->
-    <section class="py-24 bg-zuva-taupe relative overflow-hidden">
+    <section id="contact" class="py-24 bg-zuva-taupe relative overflow-hidden">
         <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
         
         <div class="max-w-4xl mx-auto px-4 text-center relative z-10 scroll-hidden">
-            <h2 class="font-serif text-4xl md:text-6xl text-zuva-cream mb-6">Ready to Reset?</h2>
+            <h2 class="font-serif text-4xl md:text-6xl text-zuva-cream mb-6">Ready to Reset? It's Time to Begin.</h2>
             <p class="font-sans text-lg text-zuva-cream/80 mb-10 max-w-2xl mx-auto">
-                Your new beginning is waiting. Schedule a complimentary 15-minute clarity call to see if we are the right fit for your journey.
+                We offer a warm, complimentary consultation to ensure Zuva is the perfect light for your journey.
             </p>
             <a href="#" class="btn-glow inline-block px-10 py-5 bg-zuva-peach text-white rounded-md text-sm uppercase tracking-widest font-semibold hover:bg-white hover:text-zuva-peach transition-all duration-300 transform hover:-translate-y-1">
-                Book a Clarity Call
+                Schedule Now
             </a>
         </div>
     </section>
 
     <!-- Footer -->
-    <footer class="bg-zuva-dark text-zuva-cream/60 py-16 border-t border-white/5">
+    <footer class="bg-zuva-dark text-zuva-cream/60 py-16 border-t border-white/5 overflow-x-hidden">
         <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">
             
             <div class="col-span-1 md:col-span-1">
@@ -634,8 +641,8 @@
                 </ul>
             </div>
         </div>
-        <div class="border-t border-white/5 mt-12 pt-8 text-center text-xs">
-            &copy; 2024 Zuva Mental Health & Wellness Center. All rights reserved.
+        <div class="border-t border-white/5 mt-12 pt-8 text-center text-xs px-4">
+            &copy; 2025 Zuva Mental Health & Wellness Center. All rights reserved.
         </div>
     </footer>
 
