@@ -1,0 +1,831 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zuva Mental Health & Wellness</title>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/x-icon" href="img/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="img/favicon.png">
+    <link rel="apple-touch-icon" href="img/icon.png">
+    
+    <!-- Fonts: Lora (Serif) & Montserrat (Sans) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;1,400&family=Montserrat:wght@300;400;500;600&display=swap" rel="stylesheet">
+    
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        zuva: {
+                            cream: '#FAF7F5',
+                            peach: '#E8A98F',
+                            taupe: '#5C534D',
+                            ivory: '#FFF0E4',
+                            dark: '#4A423E'
+                        }
+                    },
+                    fontFamily: {
+                        serif: ['Lora', 'serif'],
+                        sans: ['Montserrat', 'sans-serif'],
+                    },
+                    animation: {
+                        'sunrise': 'gradientShift 15s ease infinite',
+                        'float': 'float 6s ease-in-out infinite',
+                        'fade-in-up': 'fadeInUp 1s ease-out forwards',
+                        'slide-in-left': 'slideInFromLeft 4s ease-out forwards',
+                    },
+                    keyframes: {
+                        gradientShift: {
+                            '0%, 100%': { backgroundPosition: '0% 50%' },
+                            '50%': { backgroundPosition: '100% 50%' },
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(-10px)' },
+                        },
+                        fadeInUp: {
+                            '0%': { opacity: '0', transform: 'translateY(20px)' },
+                            '100%': { opacity: '1', transform: 'translateY(0)' },
+                        },
+                        slideInFromLeft: {
+                            '0%': { transform: 'translateX(-100px)' },
+                            '100%': { transform: 'translateX(0)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        /* Sun Animation CSS Variables */
+        :root {
+            /* --sun-y controls the entire scene.
+               0.0 = Sunset (Dark/Warm)
+               1.0 = Noon (Bright/Light)
+            */
+            --sun-y: 0; 
+            
+            /* Sky Color Calculations based on --sun-y - using Zuva brand colors */
+            --sky-top-h: 25; 
+            --sky-top-s: 60%;
+            --sky-top-l: calc(97% - ((1 - var(--sun-y)) * 20%)); 
+            
+            --sky-bot-h: calc(25 - ((1 - var(--sun-y)) * 10)); /* Peach tones */
+            --sky-bot-s: calc(40% + ((1 - var(--sun-y)) * 40%)); 
+            --sky-bot-l: calc(92% - ((1 - var(--sun-y)) * 30%));
+
+            --sun-color: #fff;
+            
+            /* Hill brightness */
+            --hill-brightness: calc(40% + (var(--sun-y) * 60%));
+        }
+
+        /* Custom Styles for Smoothness & Glassmorphism */
+        body {
+            background-color: #FAF7F5;
+            color: #5C534D;
+            overflow-x: hidden;
+        }
+
+        .glass-panel {
+            background: rgba(255, 255, 255, 0.4);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+
+        /* Hero Section - Two Column Layout */
+        .hero-section {
+            min-height: 100vh;
+            position: relative;
+            z-index: 10;
+            overflow: hidden;
+            background: linear-gradient(
+                to bottom, 
+                hsl(var(--sky-top-h), var(--sky-top-s), var(--sky-top-l)) 0%, 
+                hsl(var(--sky-bot-h), var(--sky-bot-s), var(--sky-bot-l)) 100%
+            );
+        }
+
+        /* Sun Container - for positioning */
+        .sun-container {
+            position: absolute;
+            right: 25%;
+            transform: translateX(50%);
+            /* Movement: At 0 (sunset) = 65% top, At 1 (noon) = 20% top */
+            top: calc(65% - (var(--sun-y) * 45%));
+            transition: top 0.1s linear;
+            will-change: top;
+        }
+
+        /* The Sun - Floating on hero */
+        .sun {
+            position: relative;
+            width: 30vh;
+            height: 30vh;
+            background: var(--sun-color);
+            border-radius: 50%;
+            box-shadow: 
+                0 0 calc(40px + (var(--sun-y) * 80px)) rgba(232, 169, 143, 0.7),
+                0 0 calc(80px + (var(--sun-y) * 120px)) rgba(232, 169, 143, 0.4),
+                0 0 calc(120px + (var(--sun-y) * 160px)) rgba(232, 169, 143, 0.2);
+            z-index: 5;
+        }
+
+        /* Radiating Rings - Only on hover */
+        .sun-ring {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            border: 2px solid rgba(232, 169, 143, 0.4);
+            width: 30vh;
+            height: 30vh;
+            opacity: 0;
+            pointer-events: none;
+        }
+
+        /* Trigger radiate animation on hover */
+        .sun-container:hover .sun-ring {
+            animation: radiate 3s ease-out infinite;
+        }
+
+        .sun-container:hover .sun-ring:nth-child(2) { animation-delay: 0s; }
+        .sun-container:hover .sun-ring:nth-child(3) { animation-delay: 0.6s; }
+        .sun-container:hover .sun-ring:nth-child(4) { animation-delay: 1.2s; }
+        .sun-container:hover .sun-ring:nth-child(5) { animation-delay: 1.8s; }
+
+        @keyframes radiate {
+            0% {
+                width: 30vh;
+                height: 30vh;
+                opacity: 0.6;
+                border-width: 3px;
+            }
+            100% {
+                width: 80vh;
+                height: 80vh;
+                opacity: 0;
+                border-width: 1px;
+            }
+        }
+
+        /* Static Gradient Glow - Always visible */
+        .sun-glow {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            border-radius: 50%;
+            width: 50vh;
+            height: 50vh;
+            background: radial-gradient(circle, rgba(232, 169, 143, 0.35) 0%, rgba(232, 169, 143, 0) 70%);
+            opacity: 1;
+            pointer-events: none;
+            animation: gentlePulse 4s ease-in-out infinite;
+        }
+
+        @keyframes gentlePulse {
+            0%, 100% {
+                transform: translate(-50%, -50%) scale(1);
+                opacity: 0.8;
+            }
+            50% {
+                transform: translate(-50%, -50%) scale(1.1);
+                opacity: 1;
+            }
+        }
+
+        /* Landscape Hills */
+        .landscape {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 25vh; 
+            z-index: 2;
+            pointer-events: none;
+        }
+
+        .hill {
+            position: absolute;
+            bottom: -30%; 
+            border-radius: 50% 50% 0 0;
+        }
+
+        .hill-1 {
+            width: 180%;
+            height: 100%;
+            left: -40%;
+            background-color: hsl(25, 25%, calc(75% * var(--hill-brightness) / 100));
+            z-index: 3;
+        }
+
+        .hill-2 {
+            width: 140%;
+            height: 75%;
+            right: -30%;
+            background-color: hsl(20, 20%, calc(55% * var(--hill-brightness) / 100));
+            z-index: 4;
+        }
+
+        .hill-3 {
+            width: 120%;
+            height: 50%;
+            left: -20%;
+            background-color: hsl(15, 15%, calc(40% * var(--hill-brightness) / 100));
+            z-index: 5;
+        }
+
+        .hero-gradient {
+            background: linear-gradient(135deg, #FAF7F5 0%, #FFF0E4 50%, #fcebe4 100%);
+            background-size: 200% 200%;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #FAF7F5; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #E8A98F; 
+            border-radius: 4px;
+        }
+
+        /* The Arc Graphic Line */
+        .arc-line {
+            position: absolute;
+            left: 28px; /* Centers with the number circle */
+            top: 40px;
+            bottom: -40px;
+            width: 2px;
+            border-left: 2px dashed #E8A98F;
+            z-index: 0;
+            display: none; /* Hidden on mobile by default */
+        }
+        
+        @media (min-width: 768px) {
+            .arc-line {
+                display: block;
+                left: 50%;
+                border-left: none;
+                width: 100%;
+                height: 100%;
+                top: 0;
+            }
+        }
+
+        .scroll-hidden {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.8s ease-out;
+        }
+        .scroll-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        /* Button Glow */
+        .btn-glow:hover {
+            box-shadow: 0 0 20px rgba(232, 169, 143, 0.4);
+        }
+    </style>
+</head>
+<body class="font-sans antialiased selection:bg-zuva-peach selection:text-white">
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 transition-all duration-300 glass-panel" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 flex items-center">
+                    <a href="#" class="flex items-center">
+                        <img src="img/h_logo.png" alt="Zuva" class="h-12">
+                    </a>
+                </div>
+
+                <!-- Desktop Menu -->
+                <div class="hidden md:flex space-x-8 items-center">
+                    <a href="#home" class="text-zuva-taupe hover:text-zuva-peach transition-colors text-sm uppercase tracking-widest">Home</a>
+                    <a href="#services" class="text-zuva-taupe hover:text-zuva-peach transition-colors text-sm uppercase tracking-widest">Services</a>
+                    <a href="#transitions" class="text-zuva-taupe hover:text-zuva-peach transition-colors text-sm uppercase tracking-widest">Transitions</a>
+                    <a href="#contact" class="px-6 py-2 bg-zuva-taupe text-white rounded-full hover:bg-zuva-peach transition-all duration-300 text-sm uppercase tracking-widest">Book Now</a>
+                </div>
+
+                <!-- Mobile Menu Button -->
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-zuva-taupe hover:text-zuva-peach focus:outline-none">
+                        <i data-lucide="menu" class="w-8 h-8"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Mobile Menu Panel -->
+        <div id="mobile-menu" class="md:hidden hidden bg-zuva-cream absolute w-full shadow-lg border-b border-zuva-peach/20">
+            <div class="px-4 pt-2 pb-8 space-y-4 text-center">
+                <a href="#home" class="block px-3 py-2 text-zuva-taupe hover:text-zuva-peach text-lg font-serif">Home</a>
+                <a href="#services" class="block px-3 py-2 text-zuva-taupe hover:text-zuva-peach text-lg font-serif">Services</a>
+                <a href="#transitions" class="block px-3 py-2 text-zuva-taupe hover:text-zuva-peach text-lg font-serif">New Beginnings</a>
+                <a href="#about" class="block px-3 py-2 text-zuva-taupe hover:text-zuva-peach text-lg font-serif">Our Team</a>
+                <a href="#contact" class="block px-3 py-2 text-zuva-taupe hover:text-zuva-peach text-lg font-serif">Contact</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section - Two Column Layout -->
+    <section id="home" class="hero-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 min-h-screen">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8 items-center min-h-screen pt-24 pb-12">
+                
+                <!-- Left Column: Text & CTAs -->
+                <div class="relative z-10 order-2 md:order-1 animate-slide-in-left">
+                    <div class="mb-6 inline-block">
+                        <span class="px-4 py-1 rounded-full border border-zuva-peach/30 text-zuva-taupe text-xs uppercase tracking-[0.2em] bg-white/30 backdrop-blur-sm">
+                            Est. 2025
+                        </span>
+                    </div>
+                    
+                    <h1 class="font-serif text-4xl sm:text-5xl lg:text-6xl text-zuva-taupe mb-6 leading-tight">
+                        Find Your Light. <br>
+                        <span class="italic text-zuva-peach">Embrace the Dawn.</span>
+                    </h1>
+                    
+                    <p class="font-sans text-lg text-zuva-taupe/80 max-w-lg mb-8 leading-relaxed">
+                        A soothing digital sanctuary for emotional and mental wellness, crafted especially for women. We guide you toward clarity, warmth, and your most authentic self.
+                    </p>
+                    
+                    <div class="flex flex-col sm:flex-row gap-4">
+                        <a href="#contact" class="btn-glow px-8 py-4 bg-zuva-peach text-white rounded-md text-sm uppercase tracking-widest hover:bg-white hover:text-zuva-peach border border-transparent hover:border-zuva-peach transition-all duration-300 text-center">
+                            Start Your Journey
+                        </a>
+                        <a href="#services" class="px-8 py-4 bg-transparent border border-zuva-taupe/30 text-zuva-taupe rounded-md text-sm uppercase tracking-widest hover:border-zuva-taupe transition-all duration-300 text-center">
+                            Our Guiding Paths
+                        </a>
+                    </div>
+
+                    <!-- Scroll Indicator -->
+                    <div class="hidden md:flex items-center gap-2 mt-16 opacity-50">
+                        <i data-lucide="arrow-down" class="text-zuva-taupe w-5 h-5 animate-bounce"></i>
+                        <span class="text-zuva-taupe/60 text-sm uppercase tracking-widest">Scroll to explore</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+        <!-- Sun - Floating on right side of hero -->
+        <div class="sun-container">
+            <!-- Gradient Glow - Always visible -->
+            <div class="sun-glow"></div>
+            <!-- The Sun -->
+            <div class="sun"></div>
+            <!-- Radiating Rings - Only on hover -->
+            <div class="sun-ring"></div>
+            <div class="sun-ring"></div>
+            <div class="sun-ring"></div>
+            <div class="sun-ring"></div>
+        </div>
+
+        <!-- Landscape Hills -->
+        <div class="landscape">
+            <div class="hill hill-1"></div>
+            <div class="hill hill-2"></div>
+            <div class="hill hill-3"></div>
+        </div>
+    </section>
+
+    <!-- Services Overview -->
+    <section id="services" class="py-24 px-4 bg-white relative z-20 shadow-[0_-50px_100px_rgba(0,0,0,0.1)]">
+        <div class="max-w-7xl mx-auto">
+            <div class="text-center mb-16 scroll-hidden">
+                <h2 class="font-serif text-4xl text-zuva-taupe mb-4">Holistic Care for Every Season</h2>
+                <div class="h-0.5 w-16 bg-zuva-peach mx-auto"></div>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+                <!-- Service Card 1 -->
+                <div class="group scroll-hidden transition-all duration-500 hover:-translate-y-2">
+                    <div class="relative h-80 mb-6 overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1579126031955-7609244daf56?q=80&w=800&auto=format&fit=crop" alt="Therapy" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-95">
+                        <div class="absolute inset-0 bg-zuva-taupe/10 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                    <div class="text-center px-4">
+                        <div class="flex justify-center mb-4">
+                            <i data-lucide="heart-handshake" class="w-8 h-8 text-zuva-peach"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Therapy & Counseling</h3>
+                        <p class="font-sans text-zuva-taupe/70 leading-relaxed mb-4">
+                            One-on-one sessions tailored to your unique story. A safe space to unpack, heal, and grow.
+                        </p>
+                        <a href="#" class="text-zuva-peach text-sm uppercase tracking-widest border-b border-zuva-peach/50 pb-1 hover:text-zuva-taupe transition-colors">Learn More</a>
+                    </div>
+                </div>
+
+                <!-- Service Card 2 -->
+                <div class="group scroll-hidden transition-all duration-500 hover:-translate-y-2" style="transition-delay: 100ms;">
+                    <div class="relative h-80 mb-6 overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?q=80&w=800&auto=format&fit=crop" alt="Coaching" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-95">
+                        <div class="absolute inset-0 bg-zuva-taupe/10 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                    <div class="text-center px-4">
+                        <div class="flex justify-center mb-4">
+                            <i data-lucide="compass" class="w-8 h-8 text-zuva-peach"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Life Coaching</h3>
+                        <p class="font-sans text-zuva-taupe/70 leading-relaxed mb-4">
+                            Forward-focused guidance to help you navigate transitions, career shifts, and personal goals.
+                        </p>
+                        <a href="#" class="text-zuva-peach text-sm uppercase tracking-widest border-b border-zuva-peach/50 pb-1 hover:text-zuva-taupe transition-colors">Learn More</a>
+                    </div>
+                </div>
+
+                <!-- Service Card 3 -->
+                <div class="group scroll-hidden transition-all duration-500 hover:-translate-y-2" style="transition-delay: 200ms;">
+                    <div class="relative h-80 mb-6 overflow-hidden rounded-lg">
+                        <img src="https://images.unsplash.com/photo-1545205597-3d9d02c29597?q=80&w=800&auto=format&fit=crop" alt="Holistic" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 filter brightness-95">
+                        <div class="absolute inset-0 bg-zuva-taupe/10 group-hover:bg-transparent transition-colors"></div>
+                    </div>
+                    <div class="text-center px-4">
+                        <div class="flex justify-center mb-4">
+                            <i data-lucide="sun-medium" class="w-8 h-8 text-zuva-peach"></i>
+                        </div>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-3">Holistic Wellbeing</h3>
+                        <p class="font-sans text-zuva-taupe/70 leading-relaxed mb-4">
+                            Integrating mind and body through meditation, mindfulness workshops, and cycle-syncing resources.
+                        </p>
+                        <a href="#" class="text-zuva-peach text-sm uppercase tracking-widest border-b border-zuva-peach/50 pb-1 hover:text-zuva-taupe transition-colors">Learn More</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- New Beginnings & Transitions (The Arc Layout) -->
+    <section id="transitions" class="py-24 bg-zuva-cream relative overflow-hidden">
+        <!-- Background SVG Arc -->
+        <div class="absolute inset-0 z-0 pointer-events-none opacity-20 hidden md:block">
+             <svg width="100%" height="100%" viewBox="0 0 1440 800" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M-100 700 C 400 700, 600 100, 1540 100" stroke="#E8A98F" stroke-width="2" stroke-dasharray="10 10"/>
+            </svg>
+        </div>
+
+        <div class="max-w-7xl mx-auto px-4 relative z-10">
+            <div class="text-center mb-20 scroll-hidden">
+                <span class="text-zuva-peach text-sm uppercase tracking-widest font-semibold block mb-2">The Zuva Method</span>
+                <h2 class="font-serif text-4xl md:text-5xl text-zuva-taupe">Navigating Transitions</h2>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-12 relative">
+                
+                <!-- Step 1 -->
+                <div class="relative scroll-hidden group">
+                    <div class="bg-white p-8 rounded-lg shadow-sm border border-zuva-cream h-full transition-shadow duration-300 hover:shadow-md">
+                        <div class="w-16 h-16 rounded-full bg-zuva-ivory flex items-center justify-center mb-6 mx-auto md:mx-0">
+                            <span class="font-serif text-2xl text-zuva-peach italic">01</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-4 text-center md:text-left">Discover Your Cycle</h3>
+                        <p class="text-zuva-taupe/70 text-center md:text-left leading-relaxed">
+                            Understanding where you are. We help you map your emotional and life phases, recognizing patterns without judgment.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 2 (Offset for Arc effect) -->
+                <div class="relative scroll-hidden md:mt-24 group">
+                    <div class="bg-white p-8 rounded-lg shadow-sm border border-zuva-cream h-full transition-shadow duration-300 hover:shadow-md">
+                        <div class="w-16 h-16 rounded-full bg-zuva-ivory flex items-center justify-center mb-6 mx-auto md:mx-0">
+                            <span class="font-serif text-2xl text-zuva-peach italic">02</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-4 text-center md:text-left">Ending with Intention</h3>
+                        <p class="text-zuva-taupe/70 text-center md:text-left leading-relaxed">
+                            Before the new begins, the old must close. We provide tools for intentional closure, grief processing, and letting go.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Step 3 -->
+                <div class="relative scroll-hidden group">
+                    <div class="bg-white p-8 rounded-lg shadow-sm border border-zuva-cream h-full transition-shadow duration-300 hover:shadow-md">
+                        <div class="w-16 h-16 rounded-full bg-zuva-ivory flex items-center justify-center mb-6 mx-auto md:mx-0">
+                            <span class="font-serif text-2xl text-zuva-peach italic">03</span>
+                        </div>
+                        <h3 class="font-serif text-2xl text-zuva-taupe mb-4 text-center md:text-left">Creating Fresh Starts</h3>
+                        <p class="text-zuva-taupe/70 text-center md:text-left leading-relaxed">
+                            Building the new you. Actionable strategies, goal setting, and sustainable habits for your next chapter.
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials Slider -->
+    <section class="py-24 bg-white relative">
+        <div class="max-w-5xl mx-auto px-4 text-center">
+            
+            <!-- Circular Overlay Background -->
+            <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-zuva-peach/5 rounded-full blur-3xl z-0"></div>
+
+            <div class="relative z-10 scroll-hidden">
+                <i data-lucide="quote" class="w-12 h-12 text-zuva-peach mx-auto mb-8 opacity-50"></i>
+                
+                <div id="testimonial-container" class="min-h-[250px] flex items-center justify-center">
+                    <!-- Javascript will inject content here -->
+                    <div class="testimonial-slide opacity-0 transition-opacity duration-500 absolute inset-0 flex flex-col items-center justify-center">
+                         <h3 class="font-serif text-2xl md:text-4xl text-zuva-taupe italic mb-8 leading-normal">
+                            "Zuva didn't just help me cope; it taught me how to bloom. I finally feel at home in my own life."
+                        </h3>
+                        <div class="flex items-center gap-4">
+                            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop" alt="Sarah" class="w-12 h-12 rounded-full object-cover">
+                            <div class="text-left">
+                                <p class="font-sans font-semibold text-zuva-taupe text-sm">Sarah M.</p>
+                                <p class="font-sans text-xs text-zuva-taupe/60">Creative Director, 29</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex justify-center gap-4 mt-8">
+                    <button onclick="prevSlide()" class="p-2 rounded-full border border-zuva-taupe/20 hover:bg-zuva-peach hover:text-white hover:border-transparent transition-all">
+                        <i data-lucide="chevron-left" class="w-5 h-5"></i>
+                    </button>
+                    <button onclick="nextSlide()" class="p-2 rounded-full border border-zuva-taupe/20 hover:bg-zuva-peach hover:text-white hover:border-transparent transition-all">
+                        <i data-lucide="chevron-right" class="w-5 h-5"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section class="py-24 bg-zuva-taupe relative overflow-hidden">
+        <div class="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
+        
+        <div class="max-w-4xl mx-auto px-4 text-center relative z-10 scroll-hidden">
+            <h2 class="font-serif text-4xl md:text-6xl text-zuva-cream mb-6">Ready to Reset?</h2>
+            <p class="font-sans text-lg text-zuva-cream/80 mb-10 max-w-2xl mx-auto">
+                Your new beginning is waiting. Schedule a complimentary 15-minute clarity call to see if we are the right fit for your journey.
+            </p>
+            <a href="#" class="btn-glow inline-block px-10 py-5 bg-zuva-peach text-white rounded-md text-sm uppercase tracking-widest font-semibold hover:bg-white hover:text-zuva-peach transition-all duration-300 transform hover:-translate-y-1">
+                Book a Clarity Call
+            </a>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-zuva-dark text-zuva-cream/60 py-16 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-4 grid grid-cols-1 md:grid-cols-4 gap-12">
+            
+            <div class="col-span-1 md:col-span-1">
+                <a href="#" class="flex items-center gap-2 mb-6">
+                    <img src="img/icon.png" alt="Zuva" class="h-10">
+                    <img src="img/name_logo.png" alt="Zuva" class="h-6 brightness-0 invert">
+                </a>
+                <p class="text-sm leading-relaxed mb-6">
+                    A sanctuary for women to heal, grow, and find their light.
+                </p>
+                <div class="flex gap-4">
+                    <a href="#" class="hover:text-zuva-peach transition-colors"><i data-lucide="instagram" class="w-5 h-5"></i></a>
+                    <a href="#" class="hover:text-zuva-peach transition-colors"><i data-lucide="facebook" class="w-5 h-5"></i></a>
+                    <a href="#" class="hover:text-zuva-peach transition-colors"><i data-lucide="linkedin" class="w-5 h-5"></i></a>
+                </div>
+            </div>
+
+            <div>
+                <h4 class="text-white font-serif mb-6">Explore</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="#" class="hover:text-zuva-peach transition-colors">About Us</a></li>
+                    <li><a href="#" class="hover:text-zuva-peach transition-colors">Services</a></li>
+                    <li><a href="#" class="hover:text-zuva-peach transition-colors">The Team</a></li>
+                    <li><a href="#" class="hover:text-zuva-peach transition-colors">Blog</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-serif mb-6">Legal</h4>
+                <ul class="space-y-3 text-sm">
+                    <li><a href="#" class="hover:text-zuva-peach transition-colors">Privacy Policy</a></li>
+                    <li><a href="#" class="hover:text-zuva-peach transition-colors">Terms of Service</a></li>
+                    <li><a href="#" class="hover:text-zuva-peach transition-colors">Disclaimer</a></li>
+                </ul>
+            </div>
+
+            <div>
+                <h4 class="text-white font-serif mb-6">Contact</h4>
+                <ul class="space-y-3 text-sm">
+                    <li>hello@zuvawellness.com</li>
+                    <li>+1 (555) 123-4567</li>
+                    <li>Los Angeles, CA</li>
+                </ul>
+            </div>
+        </div>
+        <div class="border-t border-white/5 mt-12 pt-8 text-center text-xs">
+            &copy; 2024 Zuva Mental Health & Wellness Center. All rights reserved.
+        </div>
+    </footer>
+
+    <script>
+        // Initialize Lucide Icons
+        lucide.createIcons();
+
+        // Mobile Menu Toggle
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+
+        btn.addEventListener('click', () => {
+            menu.classList.toggle('hidden');
+        });
+
+        // Scroll Animation Observer
+        const observerOptions = {
+            root: null,
+            rootMargin: '0px',
+            threshold: 0.1
+        };
+
+        const observer = new IntersectionObserver((entries, observer) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('scroll-visible');
+                    observer.unobserve(entry.target); // Only animate once
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.scroll-hidden').forEach((el) => {
+            observer.observe(el);
+        });
+
+        // Navbar Glass Effect on Scroll
+        window.addEventListener('scroll', () => {
+            const nav = document.getElementById('navbar');
+            if (window.scrollY > 50) {
+                nav.classList.add('bg-white/80');
+                nav.classList.add('shadow-sm');
+            } else {
+                nav.classList.remove('bg-white/80');
+                nav.classList.remove('shadow-sm');
+            }
+        });
+
+        // Testimonial Slider Logic
+        const testimonials = [
+            {
+                quote: "Zuva didn't just help me cope; it taught me how to bloom. I finally feel at home in my own life.",
+                name: "Sarah M.",
+                role: "Creative Director, 29",
+                img: "https://images.unsplash.com/photo-1438761681033-6461ffad8d80?q=80&w=150&auto=format&fit=crop"
+            },
+            {
+                quote: "The holistic approach changed everything. I stopped treating symptoms and started healing my soul.",
+                name: "Elena R.",
+                role: "Architect, 34",
+                img: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?q=80&w=150&auto=format&fit=crop"
+            },
+            {
+                quote: "A safe haven in a chaotic world. The 'New Beginnings' program gave me the closure I didn't know I needed.",
+                name: "Maya T.",
+                role: "Graduate Student, 24",
+                img: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?q=80&w=150&auto=format&fit=crop"
+            }
+        ];
+
+        let currentSlide = 0;
+        const container = document.getElementById('testimonial-container');
+
+        function renderSlide(index) {
+            // Fade out
+            const current = container.querySelector('.testimonial-slide');
+            if(current) current.classList.remove('opacity-100');
+            
+            setTimeout(() => {
+                const t = testimonials[index];
+                container.innerHTML = `
+                    <div class="testimonial-slide opacity-0 transition-opacity duration-500 absolute inset-0 flex flex-col items-center justify-center">
+                         <h3 class="font-serif text-2xl md:text-3xl text-zuva-taupe italic mb-8 leading-normal max-w-2xl">
+                            "${t.quote}"
+                        </h3>
+                        <div class="flex items-center gap-4">
+                            <img src="${t.img}" alt="${t.name}" class="w-12 h-12 rounded-full object-cover border-2 border-zuva-peach/30">
+                            <div class="text-left">
+                                <p class="font-sans font-semibold text-zuva-taupe text-sm">${t.name}</p>
+                                <p class="font-sans text-xs text-zuva-taupe/60">${t.role}</p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                // Trigger reflow
+                setTimeout(() => {
+                    container.querySelector('.testimonial-slide').classList.add('opacity-100');
+                }, 50);
+            }, 300); // Wait for fade out
+        }
+
+        function nextSlide() {
+            currentSlide = (currentSlide + 1) % testimonials.length;
+            renderSlide(currentSlide);
+        }
+
+        function prevSlide() {
+            currentSlide = (currentSlide - 1 + testimonials.length) % testimonials.length;
+            renderSlide(currentSlide);
+        }
+
+        // Initialize first slide
+        renderSlide(0);
+
+        // ========== SUN ANIMATION ==========
+        let currentSunPosition = 0;
+        let targetSunPosition = 0;
+        let sunAnimationId = null;
+        let isIntroRunning = true;
+        const SUN_ANIMATION_SPEED = 0.008; // Consistent speed (position units per frame)
+        
+        // Intro Animation (Sun Rises on Load)
+        function runSunIntro() {
+            targetSunPosition = 0.85;
+            animateSunToTarget();
+            
+            // Mark intro as done after animation completes
+            setTimeout(() => {
+                isIntroRunning = false;
+            }, 2500);
+        }
+
+        // Animate sun smoothly to target position at consistent speed
+        function animateSunToTarget() {
+            // Cancel any existing animation
+            if (sunAnimationId) {
+                cancelAnimationFrame(sunAnimationId);
+            }
+
+            function step() {
+                const diff = targetSunPosition - currentSunPosition;
+                
+                // If close enough, snap to target
+                if (Math.abs(diff) < 0.005) {
+                    currentSunPosition = targetSunPosition;
+                    updateSunCSS();
+                    sunAnimationId = null;
+                    return;
+                }
+                
+                // Move at consistent speed toward target
+                const direction = diff > 0 ? 1 : -1;
+                currentSunPosition += direction * SUN_ANIMATION_SPEED;
+                
+                // Clamp to not overshoot
+                if (direction > 0 && currentSunPosition > targetSunPosition) {
+                    currentSunPosition = targetSunPosition;
+                } else if (direction < 0 && currentSunPosition < targetSunPosition) {
+                    currentSunPosition = targetSunPosition;
+                }
+                
+                updateSunCSS();
+                sunAnimationId = requestAnimationFrame(step);
+            }
+            
+            sunAnimationId = requestAnimationFrame(step);
+        }
+
+        // Scroll Handler - Updates target, animation handles the rest
+        window.addEventListener('scroll', () => {
+            isIntroRunning = false;
+
+            const scrollY = window.scrollY;
+            const windowHeight = window.innerHeight;
+            const scrollRatio = Math.min(scrollY / windowHeight, 1);
+
+            // Calculate new target: At scroll 0 = 0.85 (high), at scroll 100vh = 0 (horizon)
+            targetSunPosition = 0.85 - (scrollRatio * 0.85);
+            if (targetSunPosition < 0) targetSunPosition = 0;
+
+            // Start animation toward new target (will cancel existing if direction changed)
+            animateSunToTarget();
+        });
+
+        function updateSunCSS() {
+            document.documentElement.style.setProperty('--sun-y', currentSunPosition);
+        }
+
+        // Start sun intro animation
+        runSunIntro();
+
+    </script>
+</body>
+</html>

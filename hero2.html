@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scroll Sunset Animation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background-color: #0033cc; /* Deep Blue */
+            font-family: 'Courier New', Courier, monospace;
+            /* Make the page tall so we can scroll */
+            height: 200vh; 
+        }
+
+        /* The container that stays fixed on screen */
+        .scene-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        /* --- The Sun --- */
+        .sun {
+            width: 150px;
+            height: 150px;
+            background-color: #ff3366; /* Pink/Red */
+            border-radius: 50%;
+            margin-bottom: -75px; /* Sit on the line */
+            z-index: 1;
+            
+            /* Connect position to scroll variable */
+            /* We start at 0. As --scroll goes to 1, we move the sun down */
+            transform: translateY(calc(var(--scroll) * 200px)); 
+        }
+
+        /* --- The Horizon Line --- */
+        .horizon {
+            width: 100%;
+            height: 2px;
+            background-color: #ff3366;
+            z-index: 10; /* Stays on top of sun */
+        }
+
+        /* --- The Reflection --- */
+        .reflection-container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px; /* Space between waves */
+            margin-top: 10px;
+            z-index: 10;
+        }
+
+        .wave {
+            height: 4px;
+            background-color: #ff3366;
+            border-radius: 10px;
+            
+            /* Logic: As we scroll down (sun sets), reflection shrinks/fades */
+            opacity: calc(1 - var(--scroll));
+            transform: scaleX(calc(1 - (var(--scroll) * 0.5)));
+        }
+
+        /* Creating the inverted pyramid shape manually */
+        .w-1 { width: 140px; }
+        .w-2 { width: 130px; }
+        .w-3 { width: 120px; }
+        .w-4 { width: 110px; }
+        .w-5 { width: 100px; }
+        .w-6 { width: 90px; }
+        .w-7 { width: 80px; }
+
+        /* --- The Text --- */
+        .text {
+            color: #ff3366;
+            margin-top: 20px;
+            font-size: 1.2rem;
+            letter-spacing: 1px;
+            opacity: calc(1 - var(--scroll)); /* Fades out as sun sets */
+        }
+
+    </style>
+</head>
+<body>
+
+    <div class="scene-container">
+        <div class="sun"></div>
+
+        <div class="horizon"></div>
+
+        <div class="reflection-container">
+            <div class="wave w-1"></div>
+            <div class="wave w-2"></div>
+            <div class="wave w-3"></div>
+            <div class="wave w-4"></div>
+            <div class="wave w-5"></div>
+            <div class="wave w-6"></div>
+            <div class="wave w-7"></div>
+            
+            <div class="text">hello, dribbble</div>
+        </div>
+    </div>
+
+    <script>
+        // Listen for scroll events
+        window.addEventListener('scroll', () => {
+            // Calculate how far down we have scrolled (0 to 1)
+            const scrollTop = window.scrollY;
+            const docHeight = document.body.scrollHeight - window.innerHeight;
+            
+            // Limit the value between 0 and 1
+            const scrollPercent = Math.min(scrollTop / docHeight, 1);
+            
+            // Update the CSS variable inside the container
+            document.querySelector('.scene-container').style.setProperty('--scroll', scrollPercent);
+        });
+        
+        // Initialize logic on load
+        document.querySelector('.scene-container').style.setProperty('--scroll', 0);
+    </script>
+</body>
+</html>
