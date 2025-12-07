@@ -21,7 +21,7 @@
     --sky-bot-s: calc(40% + ((1 - var(--sun-y)) * 40%)); 
     --sky-bot-l: calc(92% - ((1 - var(--sun-y)) * 30%));
 
-    --sun-color: #fff;
+    --sun-color: #E8A98F;
     
     /* Hill brightness */
     --hill-brightness: calc(40% + (var(--sun-y) * 60%));
@@ -92,70 +92,6 @@ body {
     z-index: 5;
 }
 
-/* Radiating Rings - Only on hover */
-.sun-ring {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    border: 2px solid rgba(232, 169, 143, 0.4);
-    width: 30vh;
-    height: 30vh;
-    opacity: 0;
-    pointer-events: none;
-}
-
-/* Trigger radiate animation on hover */
-.sun-container:hover .sun-ring {
-    animation: radiate 3s ease-out infinite;
-}
-
-.sun-container:hover .sun-ring:nth-child(2) { animation-delay: 0s; }
-.sun-container:hover .sun-ring:nth-child(3) { animation-delay: 0.6s; }
-.sun-container:hover .sun-ring:nth-child(4) { animation-delay: 1.2s; }
-.sun-container:hover .sun-ring:nth-child(5) { animation-delay: 1.8s; }
-
-@keyframes radiate {
-    0% {
-        width: 30vh;
-        height: 30vh;
-        opacity: 0.6;
-        border-width: 3px;
-    }
-    100% {
-        width: 80vh;
-        height: 80vh;
-        opacity: 0;
-        border-width: 1px;
-    }
-}
-
-/* Static Gradient Glow - Always visible */
-.sun-glow {
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
-    border-radius: 50%;
-    width: 50vh;
-    height: 50vh;
-    background: radial-gradient(circle, rgba(232, 169, 143, 0.35) 0%, rgba(232, 169, 143, 0) 70%);
-    opacity: 1;
-    pointer-events: none;
-    animation: gentlePulse 4s ease-in-out infinite;
-}
-
-@keyframes gentlePulse {
-    0%, 100% {
-        transform: translate(-50%, -50%) scale(1);
-        opacity: 0.8;
-    }
-    50% {
-        transform: translate(-50%, -50%) scale(1.1);
-        opacity: 1;
-    }
-}
 
 /* ==========================================================================
    Landscape Hills
