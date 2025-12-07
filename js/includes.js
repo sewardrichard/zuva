@@ -18,6 +18,7 @@ async function loadAllComponents() {
     const components = [
         { id: 'nav-placeholder', path: 'components/nav.html' },
         { id: 'hero-placeholder', path: 'components/hero.html' },
+        { id: 'about-placeholder', path: 'components/about.html' },
         { id: 'services-placeholder', path: 'components/services.html' },
         { id: 'transitions-placeholder', path: 'components/transitions.html' },
         { id: 'testimonials-placeholder', path: 'components/testimonials.html' },
