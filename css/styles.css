@@ -21,7 +21,7 @@
     --sky-bot-s: calc(40% + ((1 - var(--sun-y)) * 40%)); 
     --sky-bot-l: calc(92% - ((1 - var(--sun-y)) * 30%));
 
-    --sun-color: #E8A98F;
+    --sun-color: #fefbfa;
     
     /* Hill brightness */
     --hill-brightness: calc(40% + (var(--sun-y) * 60%));
